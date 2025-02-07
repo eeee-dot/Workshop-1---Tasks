@@ -1,10 +1,14 @@
 package pl.coderslab;
 
+
+import org.apache.commons.lang3.math.NumberUtils;
+
 import java.util.Scanner;
 
 public class TaskManager {
     public static void main(String[] args) {
         ReadFile readFile = new ReadFile();
+        ReadFile.readTasks();
         boolean running = true;
         while (running) {
             running = printOptions(readFile);
@@ -12,7 +16,6 @@ public class TaskManager {
     }
 
     public static void printTasks(ReadFile readFile) {
-        ReadFile.readTasks();
         String[][] tasks = ReadFile.tasks;
         if (tasks == null) {
             System.out.println(ConsoleColors.YELLOW + "No tasks found");
@@ -24,7 +27,6 @@ public class TaskManager {
             }
         }
         System.out.println();
-        printOptions(readFile);
     }
 
     public static boolean printOptions(ReadFile readFile) {
@@ -40,17 +42,33 @@ public class TaskManager {
             case "add":
                 break;
             case "remove":
+                removeTask(readFile);
                 break;
             case "list":
                 printTasks(readFile);
+                break;
             case "exit":
                 return false;
             default:
                 System.out.println(ConsoleColors.PURPLE_BOLD + "Invalid choice\n");
         }
-
         return true;
     }
 
-
+    public static void removeTask(ReadFile readFile) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println(ConsoleColors.RESET + "Please select an option: ");
+        String choice = scanner.next();
+        if (NumberUtils.isParsable(choice)) {
+            boolean successfullyRemoved = ReadFile.removeRow(Integer.parseInt(choice));
+            if (successfullyRemoved) {
+                System.out.println(ConsoleColors.YELLOW_BOLD + "Removed row " + choice + "\n");
+            } else {
+                System.out.println(ConsoleColors.RED_BOLD + "Failed to remove row " + choice + "\n");
+            }
+        } else {
+            System.out.println(ConsoleColors.RED + "Invalid choice\n");
+            removeTask(readFile);
+        }
+    }
 }

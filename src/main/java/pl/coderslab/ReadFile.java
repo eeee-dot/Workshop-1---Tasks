@@ -1,5 +1,7 @@
 package pl.coderslab;
 
+import org.apache.commons.lang3.ArrayUtils;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -23,5 +25,14 @@ public class ReadFile {
         } catch (IOException e) {
             System.out.println(ConsoleColors.RED + "Error while reading file");
         }
+    }
+
+    public static boolean removeRow(int index) {
+        try {
+            tasks = ArrayUtils.remove(tasks, index - 1);
+        } catch (IndexOutOfBoundsException e) {
+            return false;
+        }
+        return true;
     }
 }
