@@ -6,9 +6,15 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 
 public class ReadFile {
     public static String[][] tasks;
+
+    private ReadFile() {
+
+    }
+
 
     public static void readTasks() {
         Path path = Paths.get("tasks.csv");
@@ -35,4 +41,25 @@ public class ReadFile {
         }
         return true;
     }
+
+    public static void addRow(String[] data) {
+        tasks = ArrayUtils.add(tasks, data);
+    }
+
+    public static void saveToFile() {
+        Path path = Paths.get("tasks.csv");
+        try {
+            Files.writeString(path, "");
+            for (String[] rowTask : tasks) {
+                for (String task : rowTask) {
+                    String format = String.format("%s,", task);
+                    Files.writeString(path, format, StandardOpenOption.APPEND);
+                }
+                Files.writeString(path, "\n", StandardOpenOption.APPEND);
+            }
+        } catch (IOException e) {
+            System.out.println(ConsoleColors.RED + "Error while saving file");
+        }
+    }
+
 }
